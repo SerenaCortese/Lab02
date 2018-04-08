@@ -48,9 +48,15 @@ public class AlienController {
     
     @FXML
     void doTranslate(ActionEvent event) {
-    	    String s= txtWord.getText();
-
-    	    if(s.matches("[A-Za-z ]+")==false) {
+	    	String s= txtWord.getText();
+	    	
+	    	//controllo sull'input
+	    	if (s == null || s.length() == 0) {
+				txtResult.setText("Inserire una o due parole.");
+				return;
+			}
+    	    
+    	    if(s.matches("[A-Za-z? ]*")==false) {
     	    	txtResult.appendText("ERRORE: Sono ammessi solo caratteri alfabetici e/o spazio!\n");
     	    	txtWord.clear();
     	    	return;
@@ -64,17 +70,30 @@ public class AlienController {
         	    String traduzione= array[1];
         	    
         	    dizi.addWord(aliena, traduzione);
-        	    txtResult.appendText("Hai inserito la traduzione della parola "+ aliena+ ".\n");
+        	    txtResult.setText("La parola: \"" + aliena + "\", con traduzione: \"" + traduzione + "\", è stata inserita nel dizionario.");
         	    txtWord.clear();
     	    }else if(array.length==1){
     	    	//traduci parola
     	    	String parola = array[0];
-    	    	String traduzione = dizi.translateWord(parola);
-    	    	txtResult.appendText("La traduzione della parola "+ parola +" è: "+traduzione+".\n");
+    	    	String traduzione; 
+    	    	
+    	    	if(parola.matches("[a-zA-Z?]*") && !parola.matches("[a-zA-Z]*")) {
+    	    		traduzione = dizi.tradWildCard(parola);
+    	    	}else {
+    	    		traduzione = dizi.translateWord(parola);
+        	    	
+    	    	}
+    	    	
+    	    	
+    	    	if(traduzione!=null) {
+    	    		txtResult.setText("La traduzione della parola "+ parola +" è: "+traduzione+".\n");
+    	    	}else {
+    	    		txtResult.setText("La parola cercata non esiste nel dizionario.");
+    	    	}
     	    	txtWord.clear();
     	    }else {
     	    	//messaggio errore
-    	    	txtResult.appendText("ERRORE: Hai inserito troppe parole.\n");
+    	    	txtResult.setText("ERRORE: Hai inserito troppe parole.\n");
     	    }
     	    
     }
@@ -83,6 +102,7 @@ public class AlienController {
     @FXML
     void doReset(ActionEvent event) {
     	txtResult.clear();
+    	dizi.resetDictionary();
     }
     
 }

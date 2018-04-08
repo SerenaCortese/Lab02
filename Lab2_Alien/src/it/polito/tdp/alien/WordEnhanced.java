@@ -9,7 +9,7 @@ public class WordEnhanced {
 	
 	public WordEnhanced(String alienWord,String translation){
 		this.alienWord = alienWord;
-		this.traduzioni = new ArrayList<>();
+		this.traduzioni = new ArrayList<String>();
 		this.addTrad(translation);
 	}
 
@@ -22,21 +22,48 @@ public class WordEnhanced {
 	}
 	
 	public void addTrad(String parola) {
-		traduzioni.add(parola);
+		if(!traduzioni.contains(parola))
+			traduzioni.add(parola);
 	}
 	
 	public String stampaTrad() {
 		String stampa="";
 		for(String s: traduzioni) {
-			stampa+= s+", ";
+			stampa+= s+"\n ";
 		}
 		return stampa;
 	}
 
-	public boolean equals(Object altro) {
-		WordEnhanced w= (WordEnhanced)altro;
-		if(alienWord.equalsIgnoreCase(w.getAlienWord())) {
-			return true;
-		}else return false;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((alienWord == null) ? 0 : alienWord.hashCode());
+		return result;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		WordEnhanced other = (WordEnhanced) obj;
+		if (alienWord == null) {
+			if (other.alienWord != null)
+				return false;
+		} else if (!alienWord.equals(other.alienWord))
+			return false;
+		return true;
+	}
+
+	public boolean compareWild(String alienWildCard) {
+		if(alienWord.matches(alienWildCard))
+			return true;
+		return false;
+	}
+
+	
 }

@@ -13,13 +13,11 @@ public class AlienDictionary {
 	
 	public void addWord(String alienWord, String translation) {
 		/*Word w = new Word(alienWord,translation);
-		for(Word wtemp: dizionario) {
-			if(wtemp.equals(w)) {
-				wtemp.setTranslation(w.getTranslation());
-				return;
-			}
-				
-		}*/
+		if (dictionary.contains(w)) {
+			dictionary.get(dictionary.indexOf(w)).setTranslation(trans);
+			return;
+		}
+		*/
 		
 		WordEnhanced w = new WordEnhanced(alienWord,translation);
 		for(WordEnhanced wtemp: dizionario) {
@@ -48,6 +46,33 @@ public class AlienDictionary {
 		}
 		return null;
 		
+	}
+	
+	public void resetDictionary() {
+		dizionario.clear();
+	}
+
+	public String tradWildCard(String alienWildCard) {
+		
+		// Utilizzo le regual expression di Java (posso usare stringa.matches())
+		// Sostituisco "?" con "."
+		// "." nelle regex indica un qualsiasi carattere
+		alienWildCard = alienWildCard.replaceAll("\\?", ".");
+
+		int matchCounter = 0;
+		StringBuilder sb = new StringBuilder();
+
+		for (WordEnhanced w : dizionario) {
+			if (w.compareWild(alienWildCard)) {
+				matchCounter++;
+				sb.append(w.stampaTrad() + "\n");
+			}
+		}
+		
+		if (matchCounter != 0)
+			return sb.toString();
+		else
+			return null;
 	}
 	
 
